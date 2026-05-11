@@ -158,6 +158,25 @@ public:
     void setPos(int32_t pos);
 
     /**
+     * @brief Sets the target position in full turns.
+     *
+     * This value represents the whole number of rotations. Use this together
+     * with setPosAngle() to specify the angle within the current turn.
+     *
+     * @param turn A 32-bit integer representing the desired number of turns.
+     */
+    void setPosTurn(int32_t turn);
+
+    /**
+     * @brief Sets the target angle within the current turn (in hundredths of degrees).
+     *
+     * This sets the intra-turn angle and is intended to be used together with
+     * setPosTurn() to define the full position.
+     * The valid range for angle_x100 is from 0 to 36000, which corresponds to 0 to 360 degrees.
+     */
+    void setPosAngle(uint16_t angle);
+
+    /**
      * @brief Sets the maximum current limit for position control in the UnitRollerI2C device.
      *
      * This function writes a 32-bit integer value to the maximum current register of the
@@ -620,6 +639,29 @@ public:
     int32_t getPos(void);
 
     /**
+     * @brief Retrieves the commanded number of full turns.
+     *
+     * This returns the last turn value written via setPosTurn(), i.e. the target
+     * turns command.
+     *
+     * @return int32_t The commanded number of full turns, as a signed 32-bit integer.
+     *
+     * @note The function reads 4 bytes of data starting from the register
+     *       (UnitRollerI2C_POS_TURN_REG). Ensure that I2C communication has been
+     *       properly initialized before calling this function.
+     */
+    int32_t getPosTurn(void);
+
+    /**
+     * @brief Retrieves the commanded angle within the current turn.
+     *
+     * This returns the last angle value written via setPosAngle(), i.e. the target
+     * angle command within the current turn.
+     * @return uint16_t The commanded angle within the current turn, as an unsigned 16-bit integer.
+     */
+    uint16_t getPosAngle(void);
+
+    /**
      * @brief Retrieves the maximum current value permitted at the specified position
      * from the UnitRollerI2C device.
      *
@@ -657,6 +699,29 @@ public:
      *       properly initialized before calling this function.
      */
     int32_t getPosReadback(void);
+
+    /**
+     * @brief Retrieves the actual number of full turns read back from the device.
+     *
+     * This returns the measured turn count reported by the device (readback), which
+     * may differ from the commanded value.
+     *
+     * @return int32_t The readback number of full turns, as a signed 32-bit integer.
+     *
+     * @note The function reads 4 bytes of data starting from the register
+     *       (UnitRollerI2C_POS_TURN_REG). Ensure that I2C communication has been
+     *       properly initialized before calling this function.
+     */
+    int32_t getPosReadbackTurn(void);
+
+    /**
+     * @brief Retrieves the angle within the current turn from the UnitRollerI2C device.
+     *
+     * This function reads a 16-bit unsigned integer value representing the angle within the current turn.
+     * The angle is typically measured in hundredths of degrees, where a value of 0 corresponds to 0 degrees
+     * and a value of 36000 corresponds to 360 degrees.
+     */
+    uint16_t getPosReadbackAngle(void);
 
     /**
      * @brief Retrieves the current value from the UnitRollerI2C device.
@@ -997,6 +1062,23 @@ public:
      *       initialized before calling this function.
      */
     uint8_t getI2CAddress(void);
+
+    /**
+     * @brief Retrieves the device type ID from the UnitRollerI2C device.
+     *
+     * This function sends a request to read the device type ID, which can be used
+     * to identify the specific model or variant of the device. This information is
+     * useful for ensuring compatibility and proper configuration.
+     *
+     * @return uint8_t The device type ID as a single byte. The interpretation
+     *         of this value will depend on the specific implementation of the device.
+     *
+     * @note The function initiates an I2C transmission to the specified address
+     *       (_addr) and reads the device type ID from the register
+     *       (I2C_DEVICE_ID_REG). Ensure that I2C communication has been properly
+     *       initialized before calling this function.
+     */
+    uint8_t getDeviceTypeID(void);
 
 private:
     uint8_t _addr;

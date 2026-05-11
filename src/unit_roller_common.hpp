@@ -210,11 +210,39 @@ typedef enum {
 #define I2C_POS_REG (0x80)
 
 /**
+ * @brief Position Turn Register.
+ *
+ * This register tracks the number of turns for the Unit RollerI2C.
+ */
+#define I2C_POS_TURN_REG (0x88)
+
+/**
+ * @brief Position Angle Register.
+ *
+ * This register tracks the angular position of the Unit RollerI2C.
+ */
+#define I2C_POS_ANGLE_REG (0x8C)
+
+/**
  * @brief Position Readback Register.
  *
  * This register allows reading back the position of the Unit Roller.
  */
 #define I2C_POS_READBACK_REG (0x90)
+
+/**
+ * @brief Position Readback Turn Register.
+ *
+ * This register allows reading back the number of turns for the Unit RollerI2C.
+ */
+#define I2C_POS_READBACK_TURN_REG (0x98)
+
+/**
+ * @brief Position Readback Angle Register.
+ *
+ * This register allows reading back the angular position of the Unit RollerI2C.
+ */
+#define I2C_POS_READBACK_ANGLE_REG (0x9C)
 
 /**
  * @brief Position PID Register.
@@ -243,6 +271,14 @@ typedef enum {
  * This register is used to save settings or data to the flash memory of the Unit Roller.
  */
 #define I2C_SAVE_FLASH_REG (0xF0)
+
+/**
+ * @brief Device Type ID Register.
+ *
+ * This register identifies the type of device connected to the I2C bus.
+ * 0x01: Unit Roller485   0x02:Unit RollerCAN  0x03: Unit RollerI2C
+ */
+#define I2C_DEVICE_ID_REG (0xF4)
 
 /**
  * @brief Firmware Version Register.
